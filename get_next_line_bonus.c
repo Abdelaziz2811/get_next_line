@@ -6,39 +6,31 @@
 /*   By: abahoumi <abahoumi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 10:15:41 by abahoumi          #+#    #+#             */
-/*   Updated: 2025/10/31 15:53:29 by abahoumi         ###   ########.fr       */
+/*   Updated: 2025/11/01 14:44:57 by abahoumi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-char	*read_file(int fd, char *storage)
+char	*read_file(int fd, char *buffer, char *storage)
 {
-	char	*buffer;
 	ssize_t	read_bytes;
 	char	*tmp;
 
-	buffer = malloc(sizeof(char) * (size_t)(BUFFER_SIZE + 1));
-	if (!buffer)
-		return (free(storage), NULL);
-	if (!storage)
-		storage = ft_strdup("");
-	if (!storage)
-		return (free(buffer), NULL);
 	read_bytes = 1;
 	while (read_bytes > 0 && index_of(storage, '\n') == -1)
 	{
 		read_bytes = read(fd, buffer, BUFFER_SIZE);
 		if (read_bytes < 0)
-			return (free(buffer), free(storage), NULL);
+			return (free(storage), NULL);
 		buffer[read_bytes] = '\0';
 		tmp = storage;
 		storage = ft_strjoin(storage, buffer);
 		if (!storage)
-			return (free(buffer), free(tmp), NULL);
+			return (free(tmp), NULL);
 		free(tmp);
 	}
-	return (free(buffer), storage);
+	return (storage);
 }
 
 char	*extract_line(char *storage)
@@ -53,39 +45,45 @@ char	*extract_line(char *storage)
 	return (NULL);
 }
 
-char	*update_storage(char *storage)
+void	copy_to_buffer(char *dst, char *src, size_t size)
+{
+	size_t	i;
+
+	i = 0;
+	while (src[i] && i < size - 1)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+}
+
+void	update_buffer(char *buffer, char *storage)
 {
 	int		new_line_indx;
-	char	*new_storage;
 
 	new_line_indx = index_of(storage, '\n');
-	if (new_line_indx == -1)
-	{
-		free(storage);
-		return (NULL);
-	}
-	new_storage = ft_strdup(storage + new_line_indx + 1);
+	if (new_line_indx != -1)
+		copy_to_buffer(buffer, storage + new_line_indx + 1, BUFFER_SIZE);
 	free(storage);
-	if (!new_storage || !*new_storage)
-	{
-		free(new_storage);
-		return (NULL);
-	}
-	return (new_storage);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*storage[OPEN_MAX];
+	static char	buffer[BUFFER_SIZE][OPEN_MAX];
 	char		*line;
+	char		*storage;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || fd >= OPEN_MAX)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (index_of(storage[fd], '\n') == -1)
-		storage[fd] = read_file(fd, storage[fd]);
-	if (!storage[fd])
+	storage = ft_strdup(buffer[fd]);
+	if (!storage)
 		return (NULL);
-	line = extract_line(storage[fd]);
-	storage[fd] = update_storage(storage[fd]);
+	if (index_of(storage, '\n') == -1)
+		storage = read_file(fd, buffer[fd], storage);
+	if (!storage)
+		return (NULL);
+	line = extract_line(storage);
+	update_buffer(buffer[fd], storage);
 	return (line);
 }
