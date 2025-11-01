@@ -6,7 +6,7 @@
 /*   By: abahoumi <abahoumi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 10:15:41 by abahoumi          #+#    #+#             */
-/*   Updated: 2025/11/01 14:41:41 by abahoumi         ###   ########.fr       */
+/*   Updated: 2025/11/01 18:20:40 by abahoumi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,14 @@ void	update_buffer(char *buffer, char *storage)
 	new_line_indx = index_of(storage, '\n');
 	if (new_line_indx != -1)
 		copy_to_buffer(buffer, storage + new_line_indx + 1, BUFFER_SIZE);
+	else
+		buffer[0] = '\0';
 	free(storage);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[BUFFER_SIZE];
+	static char	buffer[(size_t)BUFFER_SIZE + 1];
 	char		*line;
 	char		*storage;
 

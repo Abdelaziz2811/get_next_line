@@ -6,7 +6,7 @@
 /*   By: abahoumi <abahoumi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 10:15:36 by abahoumi          #+#    #+#             */
-/*   Updated: 2025/10/31 15:52:53 by abahoumi         ###   ########.fr       */
+/*   Updated: 2025/11/01 17:18:33 by abahoumi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-char	*get_next_line_bonus(int fd);
+char	*get_next_line(int fd);
 int		index_of(char *s, int c);
 size_t	ft_strlen(char *s);
 char	*ft_strdup(char *s);
