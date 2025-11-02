@@ -1,0 +1,8 @@
+#!/bin/sh
+if [ "$1" = "big" ]; then
+	cc main.c -Wall -Wextra -Werror get_next_line_bonus.c get_next_line_utils_bonus.c -I . -D BUFFER_SIZE=12217342
+	./a.out
+else
+	cc main_b.c -Wall -Wextra -Werror get_next_line_bonus.c get_next_line_utils_bonus.c -I . -D BUFFER_SIZE=12217342
+	./a.out
+fi
