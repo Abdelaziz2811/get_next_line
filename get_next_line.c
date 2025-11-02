@@ -6,7 +6,7 @@
 /*   By: abahoumi <abahoumi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 10:15:41 by abahoumi          #+#    #+#             */
-/*   Updated: 2025/11/01 18:20:40 by abahoumi         ###   ########.fr       */
+/*   Updated: 2025/11/02 10:21:51 by abahoumi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ char	*read_file(int fd, char *buffer, char *storage)
 		read_bytes = read(fd, buffer, BUFFER_SIZE);
 		if (read_bytes < 0)
 			return (free(storage), NULL);
+		if (read_bytes == 0)
+			break ;
 		buffer[read_bytes] = '\0';
 		tmp = storage;
 		storage = ft_strjoin(storage, buffer);
@@ -49,6 +51,8 @@ void	copy_to_buffer(char *dst, char *src, size_t size)
 {
 	size_t	i;
 
+	if (size == 0)
+		return ;
 	i = 0;
 	while (src[i] && i < size - 1)
 	{
@@ -72,7 +76,7 @@ void	update_buffer(char *buffer, char *storage)
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[(size_t)BUFFER_SIZE + 1];
+	static char	buffer[(unsigned long)BUFFER_SIZE + 1];
 	char		*line;
 	char		*storage;
 
