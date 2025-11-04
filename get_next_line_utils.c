@@ -6,7 +6,7 @@
 /*   By: abahoumi <abahoumi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 10:15:57 by abahoumi          #+#    #+#             */
-/*   Updated: 2025/10/31 15:42:36 by abahoumi         ###   ########.fr       */
+/*   Updated: 2025/11/04 11:26:48 by abahoumi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,12 @@ char	*ft_strjoin(char *s1, char *s2)
 	int		i;
 	int		j;
 
-	if (!s1 || !s2)
+	if (!s1 && !s2)
 		return (NULL);
+	if (!s1)
+		return (ft_strdup(s2));
+	if (!s2)
+		return (ft_strdup(s1));
 	s = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!s)
 		return (NULL);
